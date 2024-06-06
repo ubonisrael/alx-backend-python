@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Contains the type-annotated function safely_get_value"""
 from typing import Mapping, Union, Any, TypeVar
-from types import NoneType
+
 
 T = TypeVar("T")
-Tvar = Union[T, NoneType]
+Tvar = Union[T, None]
 Dvar = Union[Any, T]
 
 
