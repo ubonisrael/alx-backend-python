@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
-"""Contains the type-annotated function safely_get_value"""
-from typing import Mapping, Union, Any, TypeVar
-from types import NoneType
-
-T = TypeVar("T")
-Tvar = Union[T, NoneType]
-Dvar = Union[Any, T]
+"""Contains the type-annotated function zoom array"""
+from typing import List, Tuple, Any
 
 
-def safely_get_value(dct: Mapping, key: Any, default: Tvar = None) -> Dvar:
-    """safetly returns a value"""
-    if key in dct:
-        return dct[key]
-    else:
-        return default
+def zoom_array(lst: Tuple, factor: int = 2) -> List:
+    zoomed_in: List = [
+        item for item in lst
+        for i in range(factor)
+    ]
+    return zoomed_in
+
+
+array = (12, 72, 91)
+
+zoom_2x = zoom_array(array)
+
+zoom_3x = zoom_array(array, 3)
