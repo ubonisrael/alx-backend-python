@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+"""Contains the TestAccessNestedMap class"""
+import unittests
+
+
+class TestAcessNestedMap(unittests.TestCase):
+	"""Tests for the AccessNestedMap Function"""
