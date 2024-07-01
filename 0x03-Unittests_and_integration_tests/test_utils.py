@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 """Contains the TestAccessNestedMap class"""
-from parameterized import parameterized
-from typing import Mapping, Sequence, Any, Dict, Callable, Union
+from parameterized import parameterized  # type: ignore
+from utils import access_nested_map
+from typing import Mapping, Sequence, Dict, Union
 import unittest
-
-
-access_nested_map = __import__('utils').access_nested_map
 
 
 class TestAcessNestedMap(unittest.TestCase):
@@ -26,7 +24,7 @@ class TestAcessNestedMap(unittest.TestCase):
         ])
     def test_access_nested_map_exception(self,
                                          nested_map: Mapping, path: Sequence,
-                                         expected: KeyError) -> None:
+                                         expected) -> None:
         """tests invalid output for the access_nested_map function"""
         with self.assertRaises(expected):
             access_nested_map(nested_map, path)
