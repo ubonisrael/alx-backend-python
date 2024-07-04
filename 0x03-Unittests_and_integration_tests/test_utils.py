@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """Contains the TestAccessNestedMap class"""
-from parameterized import parameterized
-from typing import Mapping, Sequence, Any, Dict, Callable, Union
+from parameterized import parameterized  # type: ignore
+from utils import access_nested_map, get_json
+from typing import Mapping, Sequence, Dict, Union
+from unittest.mock import Mock, patch
 import unittest
 
 
-access_nested_map = __import__('utils').access_nested_map
-
-
-class TestAcessNestedMap(unittest.TestCase):
+class TestAccessNestedMap(unittest.TestCase):
     """Tests for the AccessNestedMap Function"""
     @parameterized.expand([
         ({"a": 1}, ("a",), 1),
@@ -26,7 +25,21 @@ class TestAcessNestedMap(unittest.TestCase):
         ])
     def test_access_nested_map_exception(self,
                                          nested_map: Mapping, path: Sequence,
-                                         expected: KeyError) -> None:
+                                         expected) -> None:
         """tests invalid output for the access_nested_map function"""
         with self.assertRaises(expected):
             access_nested_map(nested_map, path)
+
+
+class TestGetJson(unittest.TestCase):
+    """Tests for the get_json function"""
+    @parameterized.expand([
+        ("http://example.com", {"payload": True}),
+        ("http://holberton.io", {"payload": False})
+	])
+    def test_get_json(self, test_url, test_payload):
+        """tests the get_json functions output"""
+        attr = {'json.return_value': test_payload}
+        with patch('requests.get', return_value=Mock(**attr)) as req:
+            self.assertEqual(get_json(test_url), test_payload)
+            req.assert_called_once_with(test_url)
