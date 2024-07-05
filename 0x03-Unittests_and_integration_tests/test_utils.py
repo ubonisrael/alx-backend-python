@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Contains the TestAccessNestedMap class"""
 from parameterized import parameterized  # type: ignore
-from utils import access_nested_map, get_json
+from utils import access_nested_map, get_json, memoize
 from typing import Mapping, Sequence, Dict, Union
 from unittest.mock import Mock, patch
 import unittest
@@ -36,10 +36,29 @@ class TestGetJson(unittest.TestCase):
     @parameterized.expand([
         ("http://example.com", {"payload": True}),
         ("http://holberton.io", {"payload": False})
-	])
+        ])
     def test_get_json(self, test_url, test_payload):
         """tests the get_json functions output"""
         attr = {'json.return_value': test_payload}
         with patch('requests.get', return_value=Mock(**attr)) as req:
             self.assertEqual(get_json(test_url), test_payload)
             req.assert_called_once_with(test_url)
+
+
+class TestMemoize(unittest.TestCase):
+    """Tests for the utils.memoize method"""
+    def test_memoize(self):
+        """tests the utils.memoize method"""
+        class TestClass:
+            def a_method(self):
+                return 42
+
+            @memoize
+            def a_property(self):
+                return self.a_method()
+
+        with patch.object(TestClass, 'a_method', return_value=lambda: 42) as f:
+            obj = TestClass()
+            self.assertEqual(obj.a_property(), 42)
+            self.assertEqual(obj.a_property(), 42)
+            f.assert_called_once()
